@@ -36,6 +36,23 @@ npm i
 npm run dev
 ```
 
+**Outlook connection (optional)**
+
+The app uses `window.location.origin + '/settings'` as the OAuth redirect URI, so it works on any port (8080, 8081, etc.). In your Azure App Registration, add all redirect URIs you use, e.g.:
+- `http://localhost:8080/settings`
+- `http://localhost:8081/settings`
+
+Set `VITE_MS_CLIENT_ID` and `VITE_MS_TENANT_ID` in `.env`. No `VITE_MS_REDIRECT_URI` needed.
+
+**AI translation & summary (optional)**
+
+To use the in-app translation and AI summary features:
+
+1. In the project root, create or edit `.env` and add `GEMINI_API_KEY=your_key` (or `GOOGLE_API_KEY`)
+2. Stop any old API server: `npm run server:kill`
+3. Start the API server: `npm run server` (or run both frontend + API with `npm run dev:all`)
+4. Verify: open `http://localhost:8080` and check browser console for `[api/health] { ok: true, hasGeminiKey: true, ... }`
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).

@@ -12,6 +12,25 @@ const translations = {
   "sidebar.orders": { en: "Orders", zh: "订单" },
   "sidebar.ads": { en: "Ads", zh: "广告" },
   "sidebar.settings": { en: "Settings", zh: "设置" },
+  "sidebar.sub.Interview": { en: "Interview", zh: "面试" },
+  "sidebar.sub.Application": { en: "Application", zh: "网申" },
+  "sidebar.sub.OA": { en: "OA / Assessment", zh: "OA / Assessment" },
+  "sidebar.sub.Offer": { en: "Offer", zh: "Offer" },
+  "sidebar.sub.Rejection": { en: "Rejection", zh: "Rejection" },
+  "sidebar.sub.Recruiter": { en: "Recruiter", zh: "Recruiter" },
+  "sidebar.sub.Course": { en: "Course", zh: "课程通知" },
+  "sidebar.sub.Deadline": { en: "Assignment / Deadline", zh: "作业 / Deadline" },
+  "sidebar.sub.Exam": { en: "Exam", zh: "Exam" },
+  "sidebar.sub.Events": { en: "Events", zh: "活动" },
+  "sidebar.sub.Ecommerce": { en: "Ecommerce", zh: "电商" },
+  "sidebar.sub.Travel": { en: "Travel", zh: "机票酒店" },
+  "sidebar.sub.Bills": { en: "Bills", zh: "账单" },
+  "sidebar.sub.Refund": { en: "Refund", zh: "退款" },
+  "sidebar.sub.Newsletter": { en: "Newsletter", zh: "Newsletter" },
+  "sidebar.sub.Promotion": { en: "Promotion", zh: "Promotion" },
+  "sidebar.sub.Banking": { en: "Banking", zh: "银行" },
+  "sidebar.sub.Social": { en: "Social", zh: "社交" },
+  "sidebar.sub.Uncategorized": { en: "Uncategorized", zh: "未分类" },
 
   // Dashboard
   "dashboard.dailySummary": { en: "Daily Summary", zh: "每日摘要" },
@@ -73,6 +92,27 @@ const translations = {
   "settings.trackExams": { en: "Track Exams", zh: "跟踪考试" },
   "settings.trackEvents": { en: "Track Events", zh: "跟踪活动" },
   "settings.save": { en: "Save Preferences", zh: "保存设置" },
+  "settings.outlook": { en: "Outlook", zh: "Outlook" },
+  "settings.outlookDesc": {
+    en: "Connect your Outlook account to let the assistant read your Microsoft 365 mailboxes. This is read-only for now.",
+    zh: "连接您的 Outlook 帐号以便助手读取您的 Microsoft 365 邮箱。目前仅为只读访问。"
+  },
+  "settings.connectOutlook": { en: "Connect Outlook", zh: "连接 Outlook" },
+  "settings.outlookMissingEnv": {
+    en: "Outlook connection is not configured yet. Please set VITE_MS_CLIENT_ID and VITE_MS_TENANT_ID in your .env file.",
+    zh: "Outlook 连接尚未配置。请在 .env 中设置 VITE_MS_CLIENT_ID 和 VITE_MS_TENANT_ID。"
+  },
+  "settings.disconnectOutlook": { en: "Disconnect Outlook", zh: "断开 Outlook" },
+  "settings.netease": { en: "NetEase Email", zh: "网易邮箱" },
+  "settings.neteaseDesc": {
+    en: "Connect NetEase email (163 / 126) to load messages. Accounts are managed independently from Outlook.",
+    zh: "连接网易邮箱（163 / 126）以加载邮件。与 Outlook 账户独立管理。"
+  },
+  "settings.connectNetease": { en: "Connect NetEase", zh: "连接网易邮箱" },
+  "settings.disconnectNetease": { en: "Disconnect NetEase", zh: "断开网易邮箱" },
+  "settings.neteaseEmail": { en: "Email address", zh: "邮箱地址" },
+  "settings.neteaseAppPassword": { en: "Authorization code / App password", zh: "授权码 / 应用密码" },
+  "settings.neteaseProvider": { en: "Provider", zh: "邮箱类型" },
 
   // EmailRow hover actions
   "action.translate": { en: "Translate", zh: "翻译" },

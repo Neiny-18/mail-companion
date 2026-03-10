@@ -1,12 +1,41 @@
 export type Priority = "urgent" | "important" | "normal" | "ignore";
 export type Category = "Job" | "School" | "Orders / Travel" | "Ads / Subscriptions" | "Other";
 
+export type EmailProvider = "outlook" | "netease";
+
+export type SubCategory =
+  | "Interview"
+  | "Application"
+  | "OA"
+  | "Offer"
+  | "Rejection"
+  | "Recruiter"
+  | "Course"
+  | "Deadline"
+  | "Exam"
+  | "Events"
+  | "Ecommerce"
+  | "Travel"
+  | "Bills"
+  | "Refund"
+  | "Newsletter"
+  | "Promotion"
+  | "Banking"
+  | "Social"
+  | "Uncategorized";
+
 export interface Email {
   id: string;
+  provider?: EmailProvider;
   subject: string;
+  from?: string;
+  receivedDateTime?: string;
+  bodyPreview?: string;
+  webLink?: string;
   sender: string;
   senderEmail: string;
   category: Category;
+  subCategory?: SubCategory;
   priority: Priority;
   summary: string;
   timestamp: string;
