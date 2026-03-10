@@ -1,5 +1,6 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { Outlet } from "react-router-dom";
 
 export function AppLayout() {
@@ -8,8 +9,9 @@ export function AppLayout() {
       <div className="min-h-screen flex w-full">
         <AppSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-10 flex items-center border-b border-border px-2 shrink-0">
+          <header className="h-10 flex items-center justify-between border-b border-border px-2 shrink-0">
             <SidebarTrigger />
+            <LanguageToggle />
           </header>
           <main className="flex-1 overflow-auto">
             <Outlet />

@@ -1,5 +1,7 @@
 import { Inbox, Briefcase, GraduationCap, Package, Megaphone, Settings, LayoutDashboard } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { useLanguage } from "@/i18n/LanguageContext";
+import type { TranslationKey } from "@/i18n/translations";
 import {
   Sidebar,
   SidebarContent,
@@ -12,31 +14,31 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const emailCategories = [
-  { title: "Dashboard", url: "/", icon: LayoutDashboard },
-  { title: "All Emails", url: "/emails", icon: Inbox },
-  { title: "Jobs", url: "/emails/jobs", icon: Briefcase },
-  { title: "School", url: "/emails/school", icon: GraduationCap },
-  { title: "Orders", url: "/emails/orders", icon: Package },
-  { title: "Ads", url: "/emails/ads", icon: Megaphone },
+const emailCategories: { titleKey: TranslationKey; url: string; icon: typeof Inbox }[] = [
+  { titleKey: "sidebar.dashboard", url: "/", icon: LayoutDashboard },
+  { titleKey: "sidebar.allEmails", url: "/emails", icon: Inbox },
+  { titleKey: "sidebar.jobs", url: "/emails/jobs", icon: Briefcase },
+  { titleKey: "sidebar.school", url: "/emails/school", icon: GraduationCap },
+  { titleKey: "sidebar.orders", url: "/emails/orders", icon: Package },
+  { titleKey: "sidebar.ads", url: "/emails/ads", icon: Megaphone },
 ];
 
-const utilItems = [
-  { title: "Settings", url: "/settings", icon: Settings },
+const utilItems: { titleKey: TranslationKey; url: string; icon: typeof Settings }[] = [
+  { titleKey: "sidebar.settings", url: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
+  const { t } = useLanguage();
 
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {/* Brand */}
         <div className="px-4 py-5 border-b border-border">
           {!collapsed ? (
             <p className="font-mono text-xs uppercase tracking-[0.25em] text-foreground">
-              Triage
+              {t("sidebar.brand")}
             </p>
           ) : (
             <p className="font-mono text-xs text-center text-foreground">T</p>
@@ -45,12 +47,12 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <SidebarGroupLabel className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground">
-            Inbox
+            {t("sidebar.inbox")}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {emailCategories.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
@@ -59,7 +61,7 @@ export function AppSidebar() {
                       activeClassName="bg-accent text-foreground font-bold"
                     >
                       <item.icon className="h-3.5 w-3.5 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span>{t(item.titleKey)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -70,12 +72,12 @@ export function AppSidebar() {
 
         <SidebarGroup>
           <SidebarGroupLabel className="font-sans text-[10px] uppercase tracking-widest text-muted-foreground">
-            System
+            {t("sidebar.system")}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {utilItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.titleKey}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
@@ -84,7 +86,7 @@ export function AppSidebar() {
                       activeClassName="bg-accent text-foreground font-bold"
                     >
                       <item.icon className="h-3.5 w-3.5 shrink-0" />
-                      {!collapsed && <span>{item.title}</span>}
+                      {!collapsed && <span>{t(item.titleKey)}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
