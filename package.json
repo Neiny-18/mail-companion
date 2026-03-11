@@ -8,6 +8,7 @@
     "server": "node server/index.js",
     "server:kill": "lsof -ti:3001 | xargs kill -9 2>/dev/null || true",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
+    "dev:vercel": "vercel dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",

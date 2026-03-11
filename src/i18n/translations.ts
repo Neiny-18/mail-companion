@@ -46,6 +46,10 @@ const translations = {
   "dashboard.briefGithub": { en: "GitHub password change detected — verify if authorized.", zh: "检测到 GitHub 密码更改 — 请确认是否为本人操作。" },
   "dashboard.briefFlight": { en: "Flight to Tokyo confirmed for March 25.", zh: "3 月 25 日飞往东京的航班已确认。" },
   "dashboard.briefExams": { en: "Midterm exams begin March 17.", zh: "期中考试于 3 月 17 日开始。" },
+  "dashboard.connectPrompt": { en: "Connect Outlook or NetEase in Settings to see your inbox.", zh: "在设置中连接 Outlook 或网易邮箱以查看收件箱。" },
+  "dashboard.goToSettings": { en: "Go to Settings", zh: "前往设置" },
+  "dashboard.noEmails": { en: "No emails", zh: "暂无邮件" },
+  "dashboard.connectToSee": { en: "Connect Outlook or NetEase in Settings to see emails.", zh: "在设置中连接 Outlook 或网易邮箱以查看邮件。" },
 
   // Priority
   "priority.urgent": { en: "Urgent", zh: "紧急" },

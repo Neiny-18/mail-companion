@@ -79,6 +79,24 @@ This project is built with:
 
 ## How can I deploy this project?
 
+**Vercel (recommended)**
+
+This project is configured for Vercel full-stack deployment:
+
+1. Connect your repo to Vercel
+2. Add environment variables in Vercel Project Settings:
+   - `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) – required for translation and summary
+   - `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID` – for Outlook OAuth (optional)
+3. Deploy – Vercel will build the Vite frontend and deploy API routes from `api/`
+
+**Local development**
+
+- `npm run dev:all` – frontend (Vite) + backend (Express) for full local API
+- `npm run dev:vercel` – frontend + Vercel serverless functions via `vercel dev`
+- `npm run dev` – frontend only (API calls will fail unless backend is running)
+
+**Lovable**
+
 Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
 
 ## Can I connect a custom domain to my Lovable project?
