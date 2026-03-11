@@ -17,11 +17,32 @@ import cors from "cors";
 import { ImapFlow } from "imapflow";
 
 const app = express();
-app.use(cors());
+
+/** CORS: allow local frontend + Vercel frontend. Set CORS_ORIGINS (comma-separated) on Railway. */
+const corsOrigins = (process.env.CORS_ORIGINS || "http://localhost:8080,http://localhost:8081,http://127.0.0.1:8080")
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      if (corsOrigins.includes(origin)) return cb(null, true);
+      if (corsOrigins.some((o) => o.includes("*"))) return cb(null, true);
+      return cb(null, false);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "2mb" }));
 
 const GEMINI_MODEL = "gemini-2.5-flash";
-const PORT = process.env.API_PORT || 3001;
+const PORT = process.env.PORT || process.env.API_PORT || 3001;
+
+/** GET /health - Railway health check */
+app.get("/health", (_req, res) => {
+  res.json({ ok: true, runtime: "railway" });
+});
 
 app.get("/api/health", (_req, res) => {
   res.json({
@@ -263,17 +284,25 @@ function getNeteaseHost(provider) {
   return "imap.163.com";
 }
 
-/** Map IMAP errors to safe, user-facing reasons (no secrets). */
+/** Map IMAP errors to safe, user-facing reasons (no secrets). Never throw. */
 function getNeteaseErrorReason(err) {
-  const msg = (err?.message || String(err)).toLowerCase();
-  if (msg.includes("invalid") && (msg.includes("credential") || msg.includes("auth") || msg.includes("login")))
-    return "invalid authorization code";
-  if (msg.includes("authentication failed") || msg.includes("login failed")) return "invalid authorization code";
-  if (msg.includes("econnrefused") || msg.includes("connection refused")) return "connection refused";
-  if (msg.includes("etimedout") || msg.includes("timeout")) return "connection timeout";
-  if (msg.includes("imap") && msg.includes("not enabled")) return "IMAP not enabled";
-  if (msg.includes("not supported") || msg.includes("unsupported")) return "unsupported provider";
-  return err?.message || "IMAP error";
+  try {
+    const msg = (err?.message || String(err)).toLowerCase();
+    if (msg.includes("invalid") && (msg.includes("credential") || msg.includes("auth") || msg.includes("login")))
+      return "invalid authorization code";
+    if (msg.includes("authentication failed") || msg.includes("login failed")) return "invalid authorization code";
+    if (msg.includes("econnrefused") || msg.includes("connection refused")) return "connection refused";
+    if (msg.includes("etimedout") || msg.includes("timeout")) return "connection timeout";
+    if (msg.includes("econnreset") || msg.includes("connection closed") || msg.includes("connection reset"))
+      return "connection closed";
+    if (msg.includes("imap") && msg.includes("not enabled")) return "IMAP not enabled";
+    if (msg.includes("not supported") || msg.includes("unsupported")) return "unsupported provider";
+    if (msg.includes("socket") && msg.includes("hang")) return "timeout connecting to mailbox";
+    if (msg.includes("certificate") || msg.includes("tls") || msg.includes("ssl")) return "secure connection failed";
+    return err?.message || "IMAP error";
+  } catch {
+    return "IMAP error";
+  }
 }
 
 function parseNeteaseEnvelope(envelope) {
@@ -318,20 +347,20 @@ function findTextPart(node, path = "1", preferHtml = true) {
 /** NetEase requires authorization code (app password), not the normal mailbox password. */
 app.post("/api/netease-emails", async (req, res) => {
   const log = (msg, d) => console.log("[netease-emails]", msg, d !== undefined ? String(d).slice(0, 100) : "");
-  const email = req.body?.email;
-  const appPassword = req.body?.appPassword; // NetEase authorization code / app password
-  const provider = req.body?.provider === "126" ? "126" : "163";
-  if (!email || !appPassword) {
-    return res.status(400).json({ ok: false, error: "email and authorization code required", reason: "email and appPassword required" });
-  }
-  const host = getNeteaseHost(provider);
-  const client = new ImapFlow({
-    host,
-    port: 993,
-    secure: true,
-    auth: { user: email, pass: appPassword },
-  });
   try {
+    const email = req.body?.email;
+    const appPassword = req.body?.appPassword; // NetEase authorization code / app password
+    const provider = req.body?.provider === "126" ? "126" : "163";
+    if (!email || !appPassword) {
+      return res.status(400).json({ ok: false, error: "email and authorization code required", reason: "email and appPassword required" });
+    }
+    const host = getNeteaseHost(provider);
+    const client = new ImapFlow({
+      host,
+      port: 993,
+      secure: true,
+      auth: { user: email, pass: appPassword },
+    });
     await client.connect();
     const lock = await client.getMailboxLock("INBOX");
     const list = [];
@@ -364,7 +393,7 @@ app.post("/api/netease-emails", async (req, res) => {
     list.sort((a, b) => new Date(b.receivedDateTime) - new Date(a.receivedDateTime));
     return res.json({ ok: true, emails: list });
   } catch (err) {
-    log("error", err.message);
+    log("error", err?.message ?? err);
     const reason = getNeteaseErrorReason(err);
     return res.status(500).json({
       ok: false,
@@ -376,21 +405,21 @@ app.post("/api/netease-emails", async (req, res) => {
 
 app.post("/api/netease-email-body", async (req, res) => {
   const log = (msg, d) => console.log("[netease-body]", msg, d !== undefined ? String(d).slice(0, 100) : "");
-  const email = req.body?.email;
-  const appPassword = req.body?.appPassword; // NetEase authorization code
-  const provider = req.body?.provider === "126" ? "126" : "163";
-  const uid = req.body?.uid;
-  if (!email || !appPassword || uid == null) {
-    return res.status(400).json({ ok: false, error: "email, authorization code and uid required", reason: "email, appPassword and uid required" });
-  }
-  const host = getNeteaseHost(provider);
-  const client = new ImapFlow({
-    host,
-    port: 993,
-    secure: true,
-    auth: { user: email, pass: appPassword },
-  });
   try {
+    const email = req.body?.email;
+    const appPassword = req.body?.appPassword; // NetEase authorization code
+    const provider = req.body?.provider === "126" ? "126" : "163";
+    const uid = req.body?.uid;
+    if (!email || !appPassword || uid == null) {
+      return res.status(400).json({ ok: false, error: "email, authorization code and uid required", reason: "email, appPassword and uid required" });
+    }
+    const host = getNeteaseHost(provider);
+    const client = new ImapFlow({
+      host,
+      port: 993,
+      secure: true,
+      auth: { user: email, pass: appPassword },
+    });
     await client.connect();
     const lock = await client.getMailboxLock("INBOX");
     let body = "";
@@ -412,7 +441,7 @@ app.post("/api/netease-email-body", async (req, res) => {
     await client.logout();
     return res.json({ ok: true, body });
   } catch (err) {
-    log("error", err.message);
+    log("error", err?.message ?? err);
     const reason = getNeteaseErrorReason(err);
     return res.status(500).json({
       ok: false,

@@ -79,21 +79,42 @@ This project is built with:
 
 ## How can I deploy this project?
 
-**Vercel (recommended)**
+**Vercel (frontend)**
 
-This project is configured for Vercel full-stack deployment:
+Connect your repo to Vercel. Add env vars: `GEMINI_API_KEY`, `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID`.
 
-1. Connect your repo to Vercel
-2. Add environment variables in Vercel Project Settings:
-   - `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) – required for translation and summary
-   - `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID` – for Outlook OAuth (optional)
-3. Deploy – Vercel will build the Vite frontend and deploy API routes from `api/`
+**Railway (backend for NetEase IMAP)**
+
+The backend in `server/index.js` runs on Railway for IMAP (NetEase).
+
+**Deploy steps**
+
+1. Create a project at [railway.app](https://railway.app) → New Project → Deploy from GitHub
+2. Select this repo. Railway auto-detects Node and runs `npm start`
+3. In Railway → Variables, add:
+   - `CORS_ORIGINS` – e.g. `https://your-app.vercel.app,http://localhost:8080`
+4. Deploy. Railway gives a URL like `https://xxx.up.railway.app`
+5. Test: `curl https://xxx.up.railway.app/health` → `{"ok":true,"runtime":"railway"}`
+
+**Required env vars (Railway)**
+
+| Variable       | Required | Example                                                |
+|----------------|----------|--------------------------------------------------------|
+| `CORS_ORIGINS` | Yes      | `https://mail-companion.vercel.app,http://localhost:8080` |
+
+**Local run**
+
+```sh
+npm start
+# or
+npm run server
+```
 
 **Local development**
 
-- `npm run dev:all` – frontend (Vite) + backend (Express) for full local API
-- `npm run dev:vercel` – frontend + Vercel serverless functions via `vercel dev`
-- `npm run dev` – frontend only (API calls will fail unless backend is running)
+- `npm run dev:all` – frontend + backend
+- `npm run server` or `npm start` – backend only
+- `npm run dev` – frontend only
 
 **Lovable**
 
