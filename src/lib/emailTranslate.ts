@@ -1,7 +1,10 @@
 const EMAIL_TRANSLATIONS_KEY = "emailTranslations";
 const EMAIL_SUMMARIES_KEY = "emailSummaries";
 
-const API_BASE = ""; // same origin; Vite proxy forwards /api to server
+const API_BASE = ""; // same origin; Vite proxy forwards /api to server (Gemini, etc.)
+
+/** Railway backend for NetEase IMAP. Empty = same-origin (local dev). */
+const NETEASE_BACKEND_BASE = (import.meta.env.VITE_BACKEND_BASE_URL || "").replace(/\/$/, "");
 
 export type CachedTranslation = {
   translatedText: string;
@@ -52,13 +55,14 @@ export function getNeteaseConfig(): { email: string; appPassword: string; provid
   }
 }
 
-/** Fetch full email body for NetEase (via server IMAP) */
+/** Fetch full email body for NetEase (via Railway backend IMAP) */
 export async function fetchNetEaseEmailBody(
   emailId: string,
   config: { email: string; appPassword: string; provider: "163" | "126" }
 ): Promise<string> {
   const uid = emailId.replace(/^netease:/, "");
-  const res = await fetch(`${API_BASE}/api/netease-email-body`, {
+  const base = NETEASE_BACKEND_BASE || "";
+  const res = await fetch(`${base}/api/netease-email-body`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

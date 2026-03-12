@@ -45,7 +45,7 @@ export default function SettingsPage() {
     const params = new URLSearchParams({
       client_id: msClientId!,
       response_type: "code",
-      redirect_uri: msRedirectUri!,
+      redirect_uri: getRedirectUri(),
       response_mode: "query",
       scope: "openid profile offline_access User.Read Mail.Read",
       code_challenge: codeChallenge,

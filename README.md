@@ -81,7 +81,7 @@ This project is built with:
 
 **Vercel (frontend)**
 
-Connect your repo to Vercel. Add env vars: `GEMINI_API_KEY`, `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID`.
+Connect your repo to Vercel. Add env vars: `GEMINI_API_KEY`, `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID`, `VITE_BACKEND_BASE_URL` (Railway backend URL for NetEase, e.g. `https://mail-companion-production.up.railway.app`).
 
 **Railway (backend for NetEase IMAP)**
 

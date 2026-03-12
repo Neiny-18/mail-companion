@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 import type { Category, Email, SubCategory } from "@/data/mockEmails";
 import { PriorityBadge } from "@/components/PriorityBadge";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -208,8 +209,9 @@ export default function EmailList() {
         }
 
         if (neteaseConfig) {
+          const neteaseBase = (import.meta.env.VITE_BACKEND_BASE_URL || "").replace(/\/$/, "") || "";
           try {
-            const res = await fetch("/api/netease-emails", {
+            const res = await fetch(`${neteaseBase}/api/netease-emails`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -224,9 +226,18 @@ export default function EmailList() {
               for (const m of list) {
                 allEmails.push(mapNeteaseItemToEmail(m));
               }
+            } else {
+              const text = await res.text();
+              let reason = "request failed";
+              try {
+                const j = JSON.parse(text) as { reason?: string };
+                if (j.reason) reason = j.reason;
+              } catch (_) {}
+              toast.error(`NetEase: ${reason}`);
             }
-          } catch {
-            // NetEase fetch failed; keep Outlook-only list
+          } catch (err) {
+            const msg = err instanceof Error ? err.message : String(err);
+            toast.error(`NetEase: ${msg}`);
           }
         }
 
@@ -383,8 +394,11 @@ function EmailDetailPanel({ email }: { email: Email }) {
         }
         try {
           body = await fetchNetEaseEmailBody(email.id, config);
-        } catch {
-          if (!cancelled) setFullBody("");
+        } catch (err) {
+          if (!cancelled) {
+            setFullBody("");
+            toast.error(err instanceof Error ? err.message : String(err));
+          }
           setLoadingBody(false);
           return;
         }
