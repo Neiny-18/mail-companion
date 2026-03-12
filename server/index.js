@@ -18,8 +18,11 @@ import { ImapFlow } from "imapflow";
 
 const app = express();
 
-/** CORS: allow local frontend + Vercel frontend. Set CORS_ORIGINS (comma-separated) on Railway. */
-const corsOrigins = (process.env.CORS_ORIGINS || "http://localhost:8080,http://localhost:8081,http://127.0.0.1:8080")
+/** CORS: allow local frontend + Vercel frontend. Set CORS_ORIGINS (comma-separated) to override. */
+const corsOrigins = (
+  process.env.CORS_ORIGINS ||
+  "http://localhost:8080,http://localhost:8081,http://127.0.0.1:8080,https://mail-companion-three.vercel.app"
+)
   .split(",")
   .map((o) => o.trim())
   .filter(Boolean);
@@ -32,6 +35,8 @@ app.use(
       return cb(null, false);
     },
     credentials: true,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json({ limit: "2mb" }));
