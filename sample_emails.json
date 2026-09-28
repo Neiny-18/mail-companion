@@ -1,0 +1,38 @@
+[
+  {
+    "subject": "Urgent: application deadline due tomorrow",
+    "sender": "University Admissions",
+    "summary": "Please upload the final document before 17:00 tomorrow.",
+    "timestamp": "2026-09-28T08:30:00Z"
+  },
+  {
+    "subject": "Interview invitation",
+    "sender": "Graduate Recruitment Team",
+    "summary": "Your online interview is scheduled for Friday morning.",
+    "timestamp": "2026-09-28T09:15:00Z"
+  },
+  {
+    "subject": "Final exam timetable",
+    "sender": "University Student Services",
+    "summary": "The exam timetable is now available in the student portal.",
+    "timestamp": "2026-09-28T10:00:00Z"
+  },
+  {
+    "subject": "Flight booking confirmed",
+    "sender": "Example Airways",
+    "summary": "Your electronic ticket is attached to this confirmation.",
+    "timestamp": "2026-09-28T10:30:00Z"
+  },
+  {
+    "subject": "Order dispatched",
+    "sender": "Example Store",
+    "summary": "Your delivery is expected within three working days.",
+    "timestamp": "2026-09-28T11:00:00Z"
+  },
+  {
+    "subject": "Weekly newsletter",
+    "sender": "Industry News",
+    "summary": "Read this week's selected articles or unsubscribe.",
+    "timestamp": "2026-09-28T11:30:00Z"
+  }
+]

@@ -1,129 +1,118 @@
-# Welcome to your Lovable project
+# Mail Companion
 
-## Project info
+Mail Companion is a bilingual email dashboard that helps users review messages,
+identify high-priority items, translate content and generate concise AI
+summaries. It supports Microsoft Outlook through OAuth and NetEase mailboxes
+through IMAP, with anonymised sample data available when no mailbox is connected.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**Live application:** https://mail-companion-three.vercel.app
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Outlook OAuth connection and NetEase IMAP support
+- Email priority and category views
+- AI-assisted translation and summarisation with Gemini
+- Daily summary dashboard for urgent and important messages
+- Chinese and English interface
+- Responsive React user interface
+- Python command-line analysis tool for anonymised email data
 
-**Use Lovable**
+## Technology stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+| Area | Technologies |
+| --- | --- |
+| Frontend | TypeScript, React, Vite, Tailwind CSS, shadcn/ui |
+| Backend | JavaScript, Node.js, Express, Vercel serverless functions |
+| Integrations | Microsoft OAuth, IMAP, Gemini API |
+| Data analysis | Python standard library, JSON, CSV, `unittest` |
+| Deployment | Vercel and Railway |
 
-Changes made via Lovable will be committed automatically to this repo.
+## Python email analyzer
 
-**Use your preferred IDE**
+The repository includes a beginner-friendly Python tool in
+[`email_analyzer.py`](email_analyzer.py). It reads anonymised email records,
+applies transparent keyword rules, and exports classified messages and summary
+statistics.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Run it from the repository root:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+python email_analyzer.py sample_emails.json \
+  --csv email_report.csv \
+  --summary email_summary.json
+```
 
-Follow these steps:
+Run the Python tests:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+python -m unittest test_email_analyzer.py -v
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+This module demonstrates variables, functions, lists and dictionaries,
+conditional logic, file handling, validation, command-line arguments and unit
+testing. The sample dataset is fictional and contains no private email content.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Run the web application locally
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+### Requirements
+
+- Node.js 18 or later
+- npm
+
+### Installation
+
+```bash
+git clone https://github.com/Neiny-18/mail-companion.git
+cd mail-companion
+npm install
+```
+
+Create a `.env` file only if you want to use the external integrations:
+
+```env
+GEMINI_API_KEY=your_key
+VITE_MS_CLIENT_ID=your_microsoft_client_id
+VITE_MS_TENANT_ID=your_microsoft_tenant_id
+VITE_BACKEND_BASE_URL=your_backend_url
+```
+
+The `.env` file is excluded from Git and must never contain credentials that
+are committed to the repository.
+
+Start the frontend:
+
+```bash
 npm run dev
 ```
 
-**Outlook connection (optional)**
+Run the frontend and local API server together:
 
-The app uses `window.location.origin + '/settings'` as the OAuth redirect URI, so it works on any port (8080, 8081, etc.). In your Azure App Registration, add all redirect URIs you use, e.g.:
-- `http://localhost:8080/settings`
-- `http://localhost:8081/settings`
-
-Set `VITE_MS_CLIENT_ID` and `VITE_MS_TENANT_ID` in `.env`. No `VITE_MS_REDIRECT_URI` needed.
-
-**AI translation & summary (optional)**
-
-To use the in-app translation and AI summary features:
-
-1. In the project root, create or edit `.env` and add `GEMINI_API_KEY=your_key` (or `GOOGLE_API_KEY`)
-2. Stop any old API server: `npm run server:kill`
-3. Start the API server: `npm run server` (or run both frontend + API with `npm run dev:all`)
-4. Verify: open `http://localhost:8080` and check browser console for `[api/health] { ok: true, hasGeminiKey: true, ... }`
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-**Vercel (frontend)**
-
-Connect your repo to Vercel. Add env vars: `GEMINI_API_KEY`, `VITE_MS_CLIENT_ID`, `VITE_MS_TENANT_ID`, `VITE_BACKEND_BASE_URL` (Railway backend URL for NetEase, e.g. `https://mail-companion-production.up.railway.app`).
-
-**Railway (backend for NetEase IMAP)**
-
-The backend in `server/index.js` runs on Railway for IMAP (NetEase).
-
-**Deploy steps**
-
-1. Create a project at [railway.app](https://railway.app) → New Project → Deploy from GitHub
-2. Select this repo. Railway auto-detects Node and runs `npm start`
-3. In Railway → Variables, add:
-   - `CORS_ORIGINS` – e.g. `https://your-app.vercel.app,http://localhost:8080`
-4. Deploy. Railway gives a URL like `https://xxx.up.railway.app`
-5. Test: `curl https://xxx.up.railway.app/health` → `{"ok":true,"runtime":"railway"}`
-
-**Required env vars (Railway)**
-
-| Variable       | Required | Example                                                |
-|----------------|----------|--------------------------------------------------------|
-| `CORS_ORIGINS` | Yes      | `https://mail-companion.vercel.app,http://localhost:8080` |
-
-**Local run**
-
-```sh
-npm start
-# or
-npm run server
+```bash
+npm run dev:all
 ```
 
-**Local development**
+## Tests and production build
 
-- `npm run dev:all` – frontend + backend
-- `npm run server` or `npm start` – backend only
-- `npm run dev` – frontend only
+```bash
+npm test
+npm run build
+```
 
-**Lovable**
+## Deployment overview
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+- The React frontend and serverless API routes in `api/` can run on Vercel.
+- The IMAP backend in `server/index.js` can run on Railway.
+- Deployment credentials and API keys should be configured as environment
+  variables on the relevant platform.
 
-## Can I connect a custom domain to my Lovable project?
+## Learning context
 
-Yes, you can!
+This is an AI-assisted personal learning project. The project work included
+defining product requirements, configuring integrations, testing user flows,
+debugging issues and reviewing the implementation. The Python analyzer was
+added as a small, transparent module that can be run and explained independently.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## Privacy
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Do not commit mailbox passwords, OAuth tokens, API keys or real email content.
+Only fictional sample records are included in this repository.
